@@ -1,0 +1,10 @@
+
+.env
+
+cache/
+
+langchain_faiss/
+
+data/
+
+vectorDB/
