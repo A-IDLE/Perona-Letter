@@ -2,10 +2,8 @@ from langchain.prompts import PromptTemplate
 from langchain_core.runnables import RunnablePassthrough
 from langchain_core.output_parsers import StrOutputParser
 from model import load_make_character_model
-from characters.characters import parse_character_description
-from database.database import init_db, get_info_by_name
-from characters.characters import HarryPotterCharacter
-import textwrap
+from database.database import get_info_by_name
+
 
 ###### PROMPT LOADER
 def load_prompt(file_name):
@@ -58,18 +56,30 @@ def load_character_prompt(character_name):
     
     character = get_info_by_name(character_name)
     
+    print(character)
+    
     prompt_inputs = {
-        'character_name': lambda x:character.character_name,
-        'biography': lambda x:character.biography,
-        'physical_description': lambda x:character.personality_and_trait,
-        'personality_and_traits': lambda x:character.personality_and_trait,
-        'possessions': lambda x:character.possessions,
-        'etymology': lambda x:character .etymology,
-        'examples_tone_of_voice': lambda x: character.examples_tone_of_voice,
+        'character_name': character.character_name,
+        'biography': character.biography,
+        'physical_description': character.personality_and_trait,
+        'magical_abilities_and_skills': character.magical_abilities_and_skills,
+        'personality_and_traits': character.personality_and_trait,
+        'relationships': character.relationships,
+        'possessions': character.possessions,
+        'etymology': character .etymology,
+        'examples_tone_of_voice':  character.examples_tone_of_voice,
+        'letter':  "{letter}",
     }
     
     base_prompt = load_prompt("form")
     
+    final_prompt = base_prompt.format(**prompt_inputs)
     
-load_character_prompt("Draco Malfoy")
+    return final_prompt
+    
+    
+
+
+
+
     

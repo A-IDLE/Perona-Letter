@@ -4,6 +4,7 @@ DATABASE_NAME = "characters"
 TABLE_NAME = "harry_potter_characters"
 
 
+
 class HarryPotterCharacter:
     def __init__(self, character_name):
         self.character_name = character_name
@@ -106,56 +107,7 @@ class HarryPotterCharacter:
             return character
         else:
             return None
-        
-    
-    # @staticmethod
-    # def get_info_by_id(character_id):
-    #     conn = sqlite3.connect(f'database/{DATABASE_NAME}.db')
-    #     cursor = conn.cursor()
-    #     cursor.execute(f'SELECT * FROM {TABLE_NAME} WHERE character_id = ?', (character_id,))
-    #     result = cursor.fetchone()
-    #     conn.close()
-    #     if result:
-    #         character = HarryPotterCharacter(result[1])
-    #         character.biography = result[2]
-    #         character.physical_description = result[3]
-    #         character.personality_and_trait = result[4]
-    #         character.magical_abilities_and_skills = result[5]
-    #         character.possessions = result[6]
-    #         character.relationships = result[7]
-    #         character.etymology = result[8]
-    #         character.examples_tone_of_voice = result[9]
-    #         character.character_id = result[0]
-    #         return character
-    #     else:
-    #         return None
-    
-    
-    
-def parse_character_description(description, character_name):
-    sections = description.split("## ")
-    character = HarryPotterCharacter(character_name)  # Assuming the character's name is known beforehand.
 
-    for section in sections[1:]:  # skip the first empty section
-        title_end = section.find('\n')
-        title = section[:title_end].strip()
-        content = section[title_end:].strip()
-
-        if title == "Biography":
-            character.set_biography(content)
-        elif title == "Physical Description":
-            character.set_physical_description(content)
-        elif title == "Personality and Traits":
-            character.set_personality_and_trait(content)
-        elif title == "Magical Abilities and Skills":
-            character.set_magical_abilities_and_skills(content)
-        elif title == "Possessions":
-            character.set_possessions(content)
-        elif title == "Relationships":
-            character.set_relationships(content)
-        elif title == "Etymology":
-            character.set_etymology(content)
-        elif title == "Examples of Tone of Voice":
-            character.set_examples_tone_of_voice(content)
-
-    return character
+    
+    
+    

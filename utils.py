@@ -82,3 +82,7 @@ def load_prompt(file_name):
 
 def document_to_string(doc):
     return f"Document content: {doc.page_content}"
+
+
+
+    

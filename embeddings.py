@@ -7,7 +7,6 @@ from langchain_core.documents.base import Document
 from langchain.storage import LocalFileStore
 from utils import load_pdf, load_txt, identify_path
 from vector_database import load_vector_db
-import logging
 import os
 
 
@@ -115,3 +114,54 @@ def embed_docs(docs_path):
         index_name= CACHE_DB_INDEX,
     )
     
+def embed_letter(letter):
+    
+    # 환경변수들 불러오기
+    load_dotenv()
+    vector_db_path = os.getenv('VECTOR_DB_PATH')  # vector db 의 경로
+    DB_INDEX = os.getenv('DB_INDEX')  # db index 이름
+    EMBEDDING_MODEL = os.getenv('EMBEDDING_MODEL') #  embedding 모델
+    embeddings_model = OpenAIEmbeddings(model=EMBEDDING_MODEL) # 사용할 embedding 모델
+    
+    
+    docs =[]
+    doc = Document(
+        page_content=letter.content,
+        metadata={
+            "sender":letter.sender_name,
+            "recevier":letter.receiver_name,
+            "created time":letter.created_date,
+        }
+    )
+    
+    docs.append(doc)
+
+    # vector db 가 있는 경우
+    if os.path.exists(vector_db_path):
+        # vector db를 불러온다
+        db = load_vector_db()
+
+        # 불러온 db에 벡터 추가
+        db2 = FAISS.from_documents(docs, embeddings_model)
+        db.merge_from(db2)
+
+        # db 저장
+        db.save_local(
+            folder_path= vector_db_path,
+            index_name= DB_INDEX,
+        )
+
+        print("FAISS database updated and saved.")
+    else:
+        # 없는 경우 만든다
+        os.makedirs(vector_db_path)
+        # Embed texts
+        db = FAISS.from_documents(docs, embeddings_model)
+        # db 저장
+        db.save_local(
+            folder_path=vector_db_path,
+            index_name=DB_INDEX,
+        )
+
+        print("new FAISS database saved.")
+            
