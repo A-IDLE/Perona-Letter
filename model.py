@@ -51,3 +51,40 @@ def load_model():
         )
     
     return llm
+
+
+def load_make_character_model():
+    
+    load_dotenv()
+    
+    llm = ChatOpenAI(
+            model="gpt-4-turbo-preview",
+            temperature=0,
+            streaming=True,
+            max_tokens= 2000,   # 모델의 max_token 설정
+            callbacks=[StreamCallback()],
+        ).configurable_alternatives(
+            # 이 필드에 id를 부여합니다
+            # 최종 실행 가능한 객체를 구성할 때, 이 id를 사용하여 이 필드를 구성할 수 있습니다.
+            ConfigurableField(id="llm"),
+            # 기본 키를 설정합니다.
+            default_key="gpt4",
+            claude=ChatAnthropic(
+                model="claude-3-opus-20240229",
+                temperature=0,
+                streaming=True,
+                callbacks=[StreamCallback()],
+            ),
+            gpt3=ChatOpenAI(
+                model="gpt-3.5-turbo",
+                temperature=0,
+                streaming=True,
+                callbacks=[StreamCallback()],
+            ),
+            ollama=ChatOllama(
+                model="EEVE-Korean-10.8B:long",
+                callback_manager=CallbackManager([StreamingStdOutCallbackHandler()]),
+            ),
+        )
+    
+    return llm
