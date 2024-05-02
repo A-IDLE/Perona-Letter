@@ -27,10 +27,11 @@ def load_vector_db():
     vector_db_path = os.getenv('VECTOR_DB_PATH')  # vector db 의 경로
     DB_INDEX = os.getenv('DB_INDEX')  # db index 이름
     EMBEDDING_MODEL = os.getenv('EMBEDDING_MODEL') #  embedding 모델
+    embeddings = OpenAIEmbeddings(model=EMBEDDING_MODEL)
 
-    db = ExtendedFAISS.load_local(
+    db = FAISS.load_local(
             folder_path = vector_db_path,
-            embeddings = EMBEDDING_MODEL,
+            embeddings = embeddings,
             index_name= DB_INDEX,
             allow_dangerous_deserialization=True
     )

@@ -8,3 +8,17 @@ langchain_faiss/
 data/
 
 vectorDB/
+
+*.md
+
+merge/
+
+prompt/
+
+prompt/test.md
+
+test.py
+
+test2.py
+
+test/

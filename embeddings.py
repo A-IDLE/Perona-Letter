@@ -3,6 +3,7 @@ from langchain_openai import OpenAIEmbeddings
 from langchain_community.vectorstores import FAISS
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain.embeddings import CacheBackedEmbeddings
+from langchain_core.documents.base import Document
 from langchain.storage import LocalFileStore
 from utils import load_pdf, load_txt, identify_path
 from vector_database import load_vector_db
@@ -32,7 +33,9 @@ def embed_text(text):
     # 사용할 embedding 모델
     embeddings_model = OpenAIEmbeddings(model=EMBEDDING_MODEL)
 
-    texts =[text]
+    docs =[]
+    doc = Document(page_content=text)
+    docs.append(doc)
 
      # vector db 가 있는 경우
     if os.path.exists(vector_db_path):
@@ -40,7 +43,7 @@ def embed_text(text):
         db = load_vector_db()
 
         # 불러온 db에 벡터 추가
-        db2 = FAISS.from_texts(texts, embeddings_model)
+        db2 = FAISS.from_documents(docs, embeddings_model)
         db.merge_from(db2)
 
         # db 저장
@@ -54,7 +57,7 @@ def embed_text(text):
         # 없는 경우 만든다
         os.makedirs(vector_db_path)
         # Embed texts
-        db = FAISS.from_texts(texts, embeddings_model)
+        db = FAISS.from_documents(docs, embeddings_model)
         # db 저장
         db.save_local(
             folder_path=vector_db_path,

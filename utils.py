@@ -63,3 +63,22 @@ def identify_path(param):
         return True
     else:
         return False
+    
+    
+###### PROMPT LOADER
+def load_prompt(file_name):
+    
+    root_path = "prompt/"
+    full_path = root_path+file_name+".md"
+    
+    try:
+        with open(full_path, 'r', encoding='utf-8') as file:
+            data = file.read()
+        return data
+    except Exception as e:
+        print("Error has Occured")
+        pass
+    
+
+def document_to_string(doc):
+    return f"Document content: {doc.page_content}"

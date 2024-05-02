@@ -7,7 +7,7 @@ from utils import load_pdf, load_txt
 
 
 def load_faiss_retriever():
-    db = load_cached_db()
+    db = load_vector_db()
     faiss_retriever = db.as_retriever(serach_type="mmr", search_kwargs={"k":1})
 
     return faiss_retriever
